@@ -1,0 +1,75 @@
+############################
+# Dependencias
+############################
+
+node_modules/
+.pnpm-store/
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/versions
+!.yarn/cache
+
+############################
+# Variables de entorno
+############################
+
+.env
+.env.*
+!.env.example
+
+############################
+# Builds y artefactos
+############################
+
+dist/
+build/
+out/
+.next/
+*.tsbuildinfo
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.eslintcache
+
+############################
+# Bases de datos y uploads
+############################
+
+*.sqlite
+*.sqlite3
+*.db
+.tmp/
+
+############################
+# Tests
+############################
+
+coverage/
+
+############################
+# Sistema operativo
+############################
+
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*~
+
+############################
+# Editores
+############################
+
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+*.swo
