@@ -1,24 +1,18 @@
+import Link from "next/link";
+import { routes } from "@/lib/routes";
+
+/**
+ * Antes los cuatro links apuntaban a "#", asi que no llevaban a ningun lado.
+ * Ahora van a paginas reales.
+ */
 const dataFooter = [
-  {
-    id: 1,
-    name: "Sobre nosotros",
-    link: "#",
-  },
-  {
-    id: 2,
-    name: "Productos",
-    link: "#",
-  },
-  {
-    id: 3,
-    name: "Mi cuenta",
-    link: "#",
-  },
-  {
-    id: 4,
-    name: "Política de privacidad",
-    link: "#",
-  },
+  { id: 1, name: "Sobre nosotros", href: routes.about },
+  { id: 2, name: "Tienda", href: routes.shop },
+  { id: 3, name: "Ofertas", href: routes.offers },
+  { id: 4, name: "Accesorios", href: routes.accesorios },
+  { id: 5, name: "Contacto", href: routes.contact },
+  { id: 6, name: "Mi cuenta", href: routes.account },
+  { id: 7, name: "Política de privacidad", href: routes.privacy },
 ];
 
 const Footer = () => {
@@ -36,12 +30,12 @@ const Footer = () => {
           <ul className="flex flex-wrap gap-x-6 gap-y-3 text-sm">
             {dataFooter.map((item) => (
               <li key={item.id}>
-                <a
-                  href={item.link}
+                <Link
+                  href={item.href}
                   className="text-muted-foreground transition-colors hover:text-foreground"
                 >
                   {item.name}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>

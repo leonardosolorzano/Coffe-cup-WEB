@@ -1,23 +1,24 @@
+import type { CategoryType } from "@/types/category";
+
+export type ProductImageType = {
+  id: number;
+  url: string;
+  alternativeText: string | null;
+  width: number;
+  height: number;
+};
+
 export type ProductType = {
   id: number;
+  documentId: string;
   productName: string;
   slug: string;
-  description: string;
+  description: string | null;
   active: boolean;
   isFeatured: boolean;
-  taste: string;
-  origin: string;
+  taste: string | null;
+  origin: string | null;
   price: number;
-  images: {
-    id: number;
-    url: string;
-  }[];
-  category: {
-    data: {
-      attributes: {
-        slug: string;
-        categoryName: string;
-      };
-    };
-  };
+  images: ProductImageType[] | null;
+  category: CategoryType | null;
 };

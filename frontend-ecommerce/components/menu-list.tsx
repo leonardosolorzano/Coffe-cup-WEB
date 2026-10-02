@@ -12,56 +12,67 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
+import useGetCategories from "@/api/getProducts";
+import type { CategoryType } from "@/types/category";
+import { categoryPath, routes } from "@/lib/routes";
 
+/**
+ * Menu de escritorio.
+ *
+ * Antes las categorias estaban escritas a mano con `/category/grano`,
+ * `/category/molido` y `/category/capsula`: rutas que no existen (faltaba la
+ * "s" en `categories`) y slugs inventados que no tienen por qué coincidir con
+ * los que genera Strapi. Ahora salen del backend, asi que el menu no puede
+ * quedar desactualizado con el catalogo.
+ */
 const MenuList = () => {
+  const { result: categories } = useGetCategories();
+
   return (
     <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Sobre nosotros</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid gap-3 p-4 md:w-100 lg:w-125 lg:grid-cols-[.75fr_1fr]">
-              <li className="row-span-3">
-                <NavigationMenuLink>
-                  <a className="flex h-full w-full flex-col justify-end rounded-md bg-linear-to-b from-muted/50 to-muted p-6 no-underline outline-none select-none focus:shadow-md">
-                    <div className="mt-4 mb-2 text-lg font-medium">
-                      Entre Tazas
-                    </div>
-                    <p className="text-sm leading-tight text-muted-foreground">
-                      Sumérgete en el apasionante mundo del café con nuestra web
-                      especializada en la venta de granos de café de alta
-                      calidad, molidos y en cápsulas.
-                    </p>
-                  </a>
-                </NavigationMenuLink>
-              </li>
-              <ListItem href="/shop" title="Tienda">
-                Accede a toda tu información, tus pedidos y mucho más.
-              </ListItem>
-              <ListItem href="/offers" title="Ofertas">
-                Sección dedicada a promociones y descuentos especiales
-              </ListItem>
-              <ListItem href="/" title="Accesorios">
-                Productos complementarios como tazas, molinillos, prensas, etc.
-              </ListItem>
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
           <NavigationMenuTrigger>Cafés</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-100 gap-3 p-4 md:w-125 md:grid-cols-2 lg:w-150">
-              {components.map((component) => (
-                <ListItem
-                  key={component.title}
-                  title={component.title}
-                  href={component.href}
-                >
-                  {component.description}
+              {categories?.length ? (
+                categories.map((category: CategoryType) => (
+                  <CategoryListItem key={category.id} category={category} />
+                ))
+              ) : (
+                <ListItem href={routes.shop} title="Tienda">
+                  Todavía no hay categorías cargadas. Mirá el catálogo completo.
                 </ListItem>
-              ))}
+              )}
             </ul>
           </NavigationMenuContent>
+        </NavigationMenuItem>
+
+        <NavigationMenuItem>
+          <NavigationMenuLink
+            render={<a href={routes.shop} />}
+            className={navigationLinkClass}
+          >
+            Tienda
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+
+        <NavigationMenuItem>
+          <NavigationMenuLink
+            render={<a href={routes.about} />}
+            className={navigationLinkClass}
+          >
+            Sobre nosotros
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+
+        <NavigationMenuItem>
+          <NavigationMenuLink
+            render={<a href={routes.contact} />}
+            className={navigationLinkClass}
+          >
+            Contacto
+          </NavigationMenuLink>
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
@@ -70,34 +81,33 @@ const MenuList = () => {
 
 export default MenuList;
 
-const components: { title: string; href: string; description: string }[] = [
-  {
-    title: "Café grano",
-    href: "/category/grano",
-    description:
-      "Granos de café enteros que requieren ser molidos antes de su preparación. Ideal para los amantes del café que aprecian la frescura y la calidad",
-  },
-  {
-    title: "Café molido",
-    href: "/category/molido",
-    description:
-      "Café en forma de polvo listo para ser utilizado en diferentes métodos de preparación, como la cafetera de filtro o la prensa francesa",
-  },
-  {
-    title: "Café de cápsula",
-    href: "/category/capsula",
-    description:
-      "Café envasado en cápsulas individuales, ofreciendo conveniencia y consistencia en la preparación",
-  },
-];
+const navigationLinkClass = cn(
+  "rounded-lg px-2.5 py-1.5 text-sm font-medium transition-colors outline-none hover:bg-muted focus:bg-muted",
+);
+
+const CategoryListItem = ({ category }: { category: CategoryType }) => (
+  <li>
+    <NavigationMenuLink
+      render={<a href={categoryPath(category.slug)} />}
+      className="block space-y-1 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+    >
+      <div className="text-sm leading-none font-medium capitalize">
+        {category.categoryName}
+      </div>
+      <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+        Mirá todos los cafés de esta categoría.
+      </p>
+    </NavigationMenuLink>
+  </li>
+);
 
 const ListItem = React.forwardRef<
   React.ElementRef<"a">,
   React.ComponentPropsWithoutRef<"a">
->(({ className, title, children, ...props }, ref) => {
-  return (
-    <li>
-      <NavigationMenuLink>
+>(({ className, title, children, ...props }, ref) => (
+  <li>
+    <NavigationMenuLink
+      render={
         <a
           ref={ref}
           className={cn(
@@ -105,14 +115,14 @@ const ListItem = React.forwardRef<
             className,
           )}
           {...props}
-        >
-          <div className="text-sm leading-none font-medium">{title}</div>
-          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-            {children}
-          </p>
-        </a>
-      </NavigationMenuLink>
-    </li>
-  );
-});
+        />
+      }
+    >
+      <div className="text-sm leading-none font-medium">{title}</div>
+      <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+        {children}
+      </p>
+    </NavigationMenuLink>
+  </li>
+));
 ListItem.displayName = "ListItem";

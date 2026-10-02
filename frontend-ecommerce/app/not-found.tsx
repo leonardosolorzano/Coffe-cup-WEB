@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Coffee } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { routes } from "@/lib/routes";
 
 export const metadata = {
   title: "Página no encontrada",
@@ -22,11 +23,11 @@ export default function NotFound() {
       </div>
 
       <div className="flex flex-wrap items-center justify-center gap-3">
-        <Link href="/" className={cn(buttonVariants({ size: "lg" }))}>
+        <Link href={routes.home} className={cn(buttonVariants({ size: "lg" }))}>
           Volver al inicio
         </Link>
         <Link
-          href="/shop"
+          href={routes.shop}
           className={cn(buttonVariants({ variant: "outline", size: "lg" }))}
         >
           Ir a la tienda

@@ -14,7 +14,13 @@ const useGetCategories = (): ResponseType<CategoryType[]> => {
         (async () => {
             try {
                 const res = await fetch(url);
+                if (!res.ok) {
+                    throw new Error(`Error ${res.status} al cargar las categorías`);
+                }
                 const json = await res.json()
+                if (!Array.isArray(json?.data)) {
+                    throw new Error('El servidor no devolvió una lista de categorías');
+                }
                 setResult(json.data)
                 setLoading(false)
             } catch (error: unknown) {
