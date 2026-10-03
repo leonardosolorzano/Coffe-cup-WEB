@@ -35,9 +35,10 @@
     "@types/react-dom": "^18",
     "typescript": "^5"
   },
+  "packageManager": "pnpm@12.4.2",
   "engines": {
     "node": ">=20.0.0 <=26.x.x",
-    "pnpm": ">=9.0.0"
+    "pnpm": ">=8.0.0"
   },
   "strapi": {
     "uuid": "a75de323-1d61-48b3-92d5-e221d265f3d9",
