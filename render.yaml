@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: coffe-cup-backend
+    runtime: node
+    rootDir: backend-ecommerce
+    buildCommand: pnpm install && pnpm build
+    startCommand: pnpm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: HOST
+        value: 0.0.0.0
+      - key: PORT
+        value: 10000
+      - key: DATABASE_CLIENT
+        value: postgres
+      - key: DATABASE_SSL
+        value: true
+      - key: DATABASE_SSL_REJECT_UNAUTHORIZED
+        value: false
+      # Los siguientes los pones manualmente en el dashboard de Render:
+      # DATABASE_URL        → Internal Database URL de tu PostgreSQL
+      # APP_KEYS            → 4 valores separados por coma
+      # API_TOKEN_SALT      → random base64
+      # ADMIN_JWT_SECRET    → random base64
+      # TRANSFER_TOKEN_SALT → random base64
+      # JWT_SECRET          → random base64
+      # ENCRYPTION_KEY      → random base64
+      # PUBLIC_URL          → https://coffe-cup-web-1.onrender.com
+      # FRONTEND_URL        → URL de tu frontend
